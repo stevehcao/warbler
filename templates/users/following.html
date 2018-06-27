@@ -1,5 +1,4 @@
-{% extends 'user_page.html' %}
-{% block user_details %}
+{% extends 'user_page.html' %} {% block user_details %}
 <div class="col-sm-9">
   <div class="row">
     {% for followee in user.following %}
@@ -14,6 +13,7 @@
               <img src="{{ followee.image_url }}" alt="Image for {{ followee.username }}" class="card-image">
               <p>@{{ followee.username }}</p>
             </a>
+
             {% if current_user.is_following(followee) %}
             <form method="POST" action="{{url_for('followers_destroy', follower_id=followee.id)}}?_method=DELETE">
               <input type="submit" value="Unfollow" class="btn btn-primary btn-sm">
@@ -23,6 +23,9 @@
               <input type="submit" value="Follow" class="btn btn-outline-primary btn-sm">
             </form>
             {% endif %}
+          </div>
+          <div class='card-text'>
+            <p>{{ followee.bio }}</p>
           </div>
         </div>
       </div>
