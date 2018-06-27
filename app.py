@@ -173,6 +173,7 @@ def users_update(user_id):
             found_user.image_url = form.image_url.data or "/static/images/default-pic.png"
             found_user.location = form.location.data
             found_user.bio = form.bio.data
+            found_user.header_image_url = form.header_image_url.data
             db.session.add(found_user)
             db.session.commit()
             return redirect(url_for('users_show', user_id=user_id))
