@@ -2,6 +2,15 @@ from datetime import datetime
 from app import db, bcrypt
 from flask_login import UserMixin
 
+Likes = db.Table(
+    'likes',
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('message_id', db.Integer,
+              db.ForeignKey('messages.id', ondelete="cascade")),
+    db.Column('user_id', db.Integer,
+              db.ForeignKey('users.id', ondelete="cascade")),
+)
+
 
 class Message(db.Model):
 
@@ -42,6 +51,11 @@ class User(db.Model, UserMixin):
         primaryjoin=(FollowersFollowee.c.follower_id == id),
         secondaryjoin=(FollowersFollowee.c.followee_id == id),
         backref=db.backref('following', lazy='dynamic'),
+        lazy='dynamic')
+    likes = db.relationship(
+        "Message",
+        secondary=Likes,
+        backref=db.backref('likes', lazy='dynamic'),
         lazy='dynamic')
 
     def __repr__(self):

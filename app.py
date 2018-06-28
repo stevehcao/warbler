@@ -7,7 +7,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
-from forms import UserForm, LoginForm, MessageForm
+from forms import UserForm, LoginForm, MessageForm, EditUserForm
 from decorators import ensure_correct_user
 
 app = Flask(__name__)
@@ -33,6 +33,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from models import User, Message
+
+db.create_all()
 
 
 @login_manager.user_loader
@@ -156,7 +158,7 @@ def users_edit(user_id):
     found_user = User.query.get(user_id)
     return render_template(
         'users/edit.html',
-        form=UserForm(obj=found_user),
+        form=EditUserForm(obj=found_user),
         user_id=found_user.id)
 
 
@@ -165,12 +167,15 @@ def users_edit(user_id):
 @ensure_correct_user
 def users_update(user_id):
     found_user = User.query.get(user_id)
-    form = UserForm(request.form)
+    form = EditUserForm(request.form)
     if form.validate():
         if User.authenticate(found_user.username, form.password.data):
-            found_user.username = form.username.data
+            # found_user.username = form.username.data
             found_user.email = form.email.data
             found_user.image_url = form.image_url.data or "/static/images/default-pic.png"
+            found_user.location = form.location.data
+            found_user.bio = form.bio.data
+            found_user.header_image_url = form.header_image_url.data
             db.session.add(found_user)
             db.session.commit()
             return redirect(url_for('users_show', user_id=user_id))
@@ -233,8 +238,18 @@ def messages_destroy(user_id, message_id):
 def root():
     messages = []
     if current_user.is_authenticated:
-        messages = Message.query.order_by(
-            Message.timestamp.desc()).limit(100).all()
+        # query the IDs of people the user is following
+
+        following_ids = [u.id for u in current_user.following]
+        following_ids.append(current_user.id)
+        # return str(following_ids)
+        # add the current user's ID to that list
+        # id_list.append(followers_ids)
+        # id_list.append(current_user.id)
+        # then query messages where the ID is in that list of user ids
+        messages = Message.query.filter(
+            Message.user_id.in_(following_ids)).order_by(
+                Message.timestamp.desc()).limit(100)
     return render_template('home.html', messages=messages)
 
 
@@ -250,3 +265,9 @@ def add_header(r):
     r.headers["Expires"] = "0"
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """will handle 404 errors"""
+    return render_template('404.html'), 404
