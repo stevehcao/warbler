@@ -134,15 +134,19 @@ def followers_destroy(follower_id):
 @app.route('/users/<int:user_id>/following', methods=['GET'])
 @login_required
 def users_following(user_id):
+    found_user = User.query.get(user_id)
+    count = found_user.likes.count()
     return render_template(
-        'users/following.html', user=User.query.get(user_id))
+        'users/following.html', user=User.query.get(user_id), count=count)
 
 
 @app.route('/users/<int:user_id>/followers', methods=['GET'])
 @login_required
 def users_followers(user_id):
+    found_user = User.query.get(user_id)
+    count = found_user.likes.count()
     return render_template(
-        'users/followers.html', user=User.query.get(user_id))
+        'users/followers.html', user=User.query.get(user_id), count=count)
 
 
 @app.route('/users/<int:user_id>', methods=["GET"])
