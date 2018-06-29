@@ -14,6 +14,8 @@ body.error-404 {
 
 .btn {
   border-radius: 50px;
+  position: absolute;
+  right: 1%;
 }
 
 .btn:hover {
@@ -189,6 +191,7 @@ nav + .container {
 
 .message-area {
   margin-left: 10px;
+  margin-right: 60px;
 }
 
 #warbler-hero {
@@ -522,4 +525,9 @@ nav + .container {
 
 .message-404 .form-inline input {
   flex: 1;
+}
+
+.likebtn .unlikebtn {
+  position: absolute;
+  right: 1%;
 }

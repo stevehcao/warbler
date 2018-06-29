@@ -259,6 +259,7 @@ def root():
     return render_template('home.html', messages=messages)
 
 
+# why are these get??? not posts???
 @app.route('/message/<int:msg_id>/like', methods=['GET'])
 def message_like(msg_id):
     """ adds like functionality """
