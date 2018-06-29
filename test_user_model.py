@@ -37,6 +37,7 @@ class MyAppIntegrationTestCase(unittest.TestCase):
     #         '/login',
     #         data=dict(username='ironmike', password='hello'),
     #         follow_redirects=True)
+    #         # the password would be a hash?
     #     self.assertEqual(b'Hello, ironmike', result.data)
 
 
