@@ -16,7 +16,9 @@ class MyAppIntegrationTestCase(unittest.TestCase):
             username='ironmike',
             email='ironmike@gmail.com',
             password=User.hash_password('hello123'))
+        new_msg = Message(text="Hey", user_id=1)
         db.session.add(new_user)
+        db.session.add(new_msg)
         db.session.commit()
         app.config['TESTING'] = True
 
@@ -25,15 +27,16 @@ class MyAppIntegrationTestCase(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    def test_create_user(self):found_user = User.query.filter_by(username='ironmike').first()
-        self.assertEqual(found_user.username, 'ironmike')
-        
+    def test_create_msg(self):
+        """Test for creating adding message to database"""
+        found_msg = Message.query.filter_by(user_id=1).first()
+        self.assertEqual(found_msg.user_id, 1)
 
-    def test_delete_user(self):
-        found_user = User.query.filter(User.id == 1).first()
-        db.session.delete(found_user)
-        db.session.commit()
-        self.assertNotEqual(found_user, None)
+    def test_destroy_msg(self):
+        """Test for deleting a message from database"""
+        found_msg = Message.query.filter_by(user_id=1).first()
+        db.session.delete(found_msg)
+        self.assertNotEqual(found_msg.user_id, None)
 
 
 if __name__ == '__main__':
