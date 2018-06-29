@@ -134,21 +134,26 @@ def followers_destroy(follower_id):
 @app.route('/users/<int:user_id>/following', methods=['GET'])
 @login_required
 def users_following(user_id):
+    found_user = User.query.get(user_id)
+    count = found_user.likes.count()
     return render_template(
-        'users/following.html', user=User.query.get(user_id))
+        'users/following.html', user=User.query.get(user_id), count=count)
 
 
 @app.route('/users/<int:user_id>/followers', methods=['GET'])
 @login_required
 def users_followers(user_id):
+    found_user = User.query.get(user_id)
+    count = found_user.likes.count()
     return render_template(
-        'users/followers.html', user=User.query.get(user_id))
+        'users/followers.html', user=User.query.get(user_id), count=count)
 
 
 @app.route('/users/<int:user_id>', methods=["GET"])
 def users_show(user_id):
     found_user = User.query.get(user_id)
-    return render_template('users/show.html', user=found_user)
+    count = found_user.likes.count()
+    return render_template('users/show.html', user=found_user, count=count)
 
 
 @app.route('/users/<int:user_id>/edit')
@@ -236,6 +241,7 @@ def messages_destroy(user_id, message_id):
 
 @app.route('/')
 def root():
+    # raise Exception
     messages = []
     if current_user.is_authenticated:
         # query the IDs of people the user is following
@@ -251,6 +257,24 @@ def root():
             Message.user_id.in_(following_ids)).order_by(
                 Message.timestamp.desc()).limit(100)
     return render_template('home.html', messages=messages)
+
+
+@app.route('/message/<int:msg_id>/like', methods=['GET'])
+def message_like(msg_id):
+    """ adds like functionality """
+    liked = Message.query.get(msg_id)
+    current_user.likes.append(liked)
+    db.session.add(current_user)
+    db.session.commit()
+    return redirect(url_for('root'))
+
+
+@app.route('/message/<int:msg_id>/unlike', methods=['GET'])
+def message_destroy_like(msg_id):
+    unliked = Message.query.get(msg_id)
+    current_user.likes.remove(unliked)
+    db.session.commit()
+    return redirect(url_for('root'))
 
 
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
