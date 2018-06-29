@@ -25,15 +25,25 @@ class MyAppIntegrationTestCase(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    def test_create_user(self):
-        found_user = User.query.filter_by(username='ironmike').first()
-        self.assertEqual(found_user.username, 'ironmike')
+    def test_login(self):
+        client = app.test_client()
+        result = client.post(
+            '/login',
+            data=dict(username='ironmike', password='hello123'),
+            follow_redirects=True)
+        self.assertIn(b'Hello, ironmike!', result.data)
 
-    def test_delete_user(self):
-        found_user = User.query.filter(User.id == 1).first()
-        db.session.delete(found_user)
-        db.session.commit()
-        self.assertNotEqual(found_user, None)
+    def test_logout(self):
+        client = app.test_client()
+        # first you must login
+        result = client.post(
+            '/login',
+            data=dict(username='ironmike', password='hello123'),
+            follow_redirects=True)
+
+        result = client.get('/logout', follow_redirects=True)
+        # self.assertEqual(response.status_code, 200)
+        self.assertIn(b'You have successfully logged out.', result.data)
 
 
 if __name__ == '__main__':
