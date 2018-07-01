@@ -1,21 +1,23 @@
 $().ready(function() {
   // will need to use event delegation
-  $('.likebtn').click(function(event) {
-    let $button = $(event.target);
-    // $button.toggleClass('unlikebtn likebtn');
-    let messageId = $button.attr('data-messageid');
+  $('.like').click(function(event) {
+    let $icon = $(event.target);
+    // $icon.toggleClass('unlike like');
+    // $icon.toggleClass('far fas');
+    let messageId = $icon.attr('data-messageid');
     $.ajax(`/message/${messageId}/like`).then(() => {
       alert('YOU LIKED IT');
-      $button.text('Unlike');
+      // $icon.text('Unlike');
     });
   });
-  $('.unlikebtn').click(function(event) {
-    let $button = $(event.target);
-    // $button.toggleClass('unlikebtn likebtn');
-    let messageId = $button.attr('data-messageid');
+  $('.unlike').click(function(event) {
+    let $icon = $(event.target);
+    // $icon.toggleClass('unlike like');
+    // $icon.toggleClass('fas far');
+    let messageId = $icon.attr('data-messageid');
     $.ajax(`/message/${messageId}/unlike`).then(() => {
       alert('YOU UNLIKED IT');
-      $button.text('Like');
+      // $icon.text('Like');
     });
   });
 });

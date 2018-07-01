@@ -12,22 +12,28 @@
           <div class="message-heading">
             <a href="{{ url_for('users_show', user_id=message.user.id) }}">@{{ message.user.username }}</a>
             {% if current_user.is_authenticated %}
+              {# adding font awesome thumbs up #}
               {% if current_user.id == message.user.id %}
                 <form method="POST" action="{{url_for('messages_show', message_id=message.id, user_id=message.user.id)}}?_method=DELETE">
                   <input type="submit" value="Delete" class="btn btn-outline-danger">
                 </form>
-              {% elif current_user.is_following(message.user) %}
+                {% elif current_user.is_following(message.user) %}
                 <form method="POST" action="{{url_for('followers_destroy', follower_id=message.user.id)}}?_method=DELETE">
                   <input type="submit" value="Unfollow" class="btn btn-primary">
                 </form>
-              {% else %}
+                {% else %}
                 <form method="POST" action="{{url_for('followers_create', follower_id=message.user.id)}}">
                   <input type="submit" value="Follow" class="btn btn-outline-primary btn-sm">
                 </form>
+                {% endif %}
+                {% endif %}
+              </div>
+              <p class="single-message">{{ message.text }}</p>
+              {% if current_user.is_like(message) %}
+                <i class="unlike fas fa-thumbs-up" data-messageid='{{ message.id }}'></i>
+              {% else %}
+                <i class="like far fa-thumbs-up" data-messageid='{{ message.id }}'></i>
               {% endif %}
-            {% endif %}
-          </div>
-          <p class="single-message">{{ message.text }}</p>
           <span class="text-muted">{{ message.timestamp.strftime('%d %B %Y') }}</span>
         </div>
       </li>

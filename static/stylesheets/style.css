@@ -14,8 +14,6 @@ body.error-404 {
 
 .btn {
   border-radius: 50px;
-  position: absolute;
-  right: 1%;
 }
 
 .btn:hover {
@@ -191,7 +189,7 @@ nav + .container {
 
 .message-area {
   margin-left: 10px;
-  margin-right: 60px;
+  /* margin-right: 60px; */
 }
 
 #warbler-hero {
@@ -527,7 +525,19 @@ nav + .container {
   flex: 1;
 }
 
-.likebtn .unlikebtn {
+.likebtn,
+.unlikebtn {
   position: absolute;
   right: 1%;
+}
+
+.fa-thumbs-up {
+  position: absolute;
+  right: 5%;
+  font-size: 2em;
+  color: green;
+}
+
+.fa-thumbs-up:hover {
+  cursor: pointer;
 }

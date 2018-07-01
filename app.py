@@ -267,7 +267,7 @@ def message_like(msg_id):
     current_user.likes.append(liked)
     db.session.add(current_user)
     db.session.commit()
-    return redirect(url_for('root'))
+    return render_template('messages/show.html', message=liked)
 
 
 @app.route('/message/<int:msg_id>/unlike', methods=['GET'])
@@ -275,7 +275,7 @@ def message_destroy_like(msg_id):
     unliked = Message.query.get(msg_id)
     current_user.likes.remove(unliked)
     db.session.commit()
-    return redirect(url_for('root'))
+    return render_template('messages/show.html', message=unliked)
 
 
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
