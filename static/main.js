@@ -6,7 +6,7 @@ $().ready(function() {
     $icon.toggleClass('far fas');
     let messageId = $icon.attr('data-messageid');
     let req = $.ajax(`/message/${messageId}/like`).then(() => {
-      alert('YOU LIKED IT');
+      alert('You liked this message!');
       // $icon.text('Unlike');
     });
   });
@@ -35,7 +35,7 @@ $().ready(function() {
     $icon.toggleClass('fas far');
     let messageId = $icon.attr('data-messageid');
     let req = $.ajax(`/message/${messageId}/unlike`).then(() => {
-      alert('YOU UNLIKED IT');
+      alert('You unliked this message!');
     });
   });
   // works for db but not html
