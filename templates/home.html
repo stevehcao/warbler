@@ -46,17 +46,14 @@
           <span class="text-muted">{{ message.timestamp.strftime('%d %B %Y') }}</span>
           <p>{{ message.text }}</p>
         </div>
-        {% if message.id.likes %}
-        <a href="{{url_for('like_destroy', msg_id=message.id)}}">
-          <button class="btn btn-primary">Unlike!></button>
-        </a>
+        {# {% if current_user.is_like(message) %}
+        <button  data-messageid="{{message.id}}" class="btn unlikebtn btn-primary">Unlike!</button>
         {% else %}
-        <a href="{{ url_for('message_like', msg_id=message.id) }}">
-          <button class="btn btn-primary">Like!</button>
-        </a>
-        {% endif %}
+        <button  data-messageid="{{message.id}}" class="btn likebtn btn-primary">Like!</button>
+        {% endif %} COMMENTED OUT #}
       </li>
       {% endfor %}
+
     </ul>
   </div>
 </div>

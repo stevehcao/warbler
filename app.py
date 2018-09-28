@@ -24,7 +24,7 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or "it's a secret"
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 modus = Modus(app)
 bcrypt = Bcrypt(app)
@@ -259,6 +259,7 @@ def root():
     return render_template('home.html', messages=messages)
 
 
+# why are these get??? not posts???
 @app.route('/message/<int:msg_id>/like', methods=['GET'])
 def message_like(msg_id):
     """ adds like functionality """
@@ -266,7 +267,7 @@ def message_like(msg_id):
     current_user.likes.append(liked)
     db.session.add(current_user)
     db.session.commit()
-    return redirect(url_for('root'))
+    return render_template('messages/show.html', message=liked)
 
 
 @app.route('/message/<int:msg_id>/unlike', methods=['GET'])
@@ -274,7 +275,7 @@ def message_destroy_like(msg_id):
     unliked = Message.query.get(msg_id)
     current_user.likes.remove(unliked)
     db.session.commit()
-    return redirect(url_for('root'))
+    return render_template('messages/show.html', message=unliked)
 
 
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask

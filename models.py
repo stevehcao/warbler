@@ -67,6 +67,9 @@ class User(db.Model, UserMixin):
     def is_following(self, user):
         return bool(self.following.filter_by(id=user.id).first())
 
+    def is_like(self, message):
+        return bool(self.likes.filter_by(id=message.id).first())
+
     @staticmethod
     def hash_password(plaintext_pw):
         return bcrypt.generate_password_hash(plaintext_pw).decode('UTF-8')

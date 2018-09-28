@@ -189,6 +189,7 @@ nav + .container {
 
 .message-area {
   margin-left: 10px;
+  /* margin-right: 60px; */
 }
 
 #warbler-hero {
@@ -522,4 +523,21 @@ nav + .container {
 
 .message-404 .form-inline input {
   flex: 1;
+}
+
+.likebtn,
+.unlikebtn {
+  position: absolute;
+  right: 1%;
+}
+
+.fa-thumbs-up {
+  position: absolute;
+  right: 5%;
+  font-size: 2em;
+  color: green;
+}
+
+.fa-thumbs-up:hover {
+  cursor: pointer;
 }
